@@ -1,9 +1,7 @@
 [package]
-name = "gsim"
+name = "villagers"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-wgpu = "30.0.1"
-winit = "0.30.13"
 rustc-hash = "2.1"
