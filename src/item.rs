@@ -1,6 +1,7 @@
 use rustc_hash::FxHashMap;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Resource {
     Wood,
     Iron,
@@ -8,7 +9,7 @@ pub enum Resource {
     Stone,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct ResourceStack {
     resource: Resource,
     amount: u32,
@@ -34,7 +35,7 @@ impl ResourceStack {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Item {
     Wood,
     Iron,
@@ -42,7 +43,7 @@ pub enum Item {
     Stone,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct ItemStack {
     item: Item,
     amount: u32,
@@ -74,13 +75,13 @@ impl ItemStack {
     }
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct Inventory {
     inner: FxHashMap<Item, u32>,
 }
 
 impl Inventory {
-    pub fn get(&self, item: Item) -> Option<u32> {
+    pub fn has(&self, item: Item) -> Option<u32> {
         self.inner.get(&item).copied()
     }
 
