@@ -1,0 +1,2 @@
+[alias]
+prod = "build --profile prod"
