@@ -1,11 +1,12 @@
+use crate::item::Resource;
 use crate::item::{ItemStack, ResourceStack};
 use crate::math::Vec2;
-use crate::item::Resource;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct ResourcePile {
-    pub pos: Vec2,
-    pub stack: ResourceStack,
+    pos: Vec2,
+    stack: ResourceStack,
 }
 
 impl ResourcePile {
@@ -16,7 +17,11 @@ impl ResourcePile {
         }
     }
 
-    pub fn exploit(&mut self, amount: u32) -> ItemStack {
+    pub fn position(&self) -> Vec2 {
+        self.pos
+    }
+
+    pub fn extract(&mut self, amount: u32) -> ItemStack {
         self.stack.take(amount).into()
     }
 
