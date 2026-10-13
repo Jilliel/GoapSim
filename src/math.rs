@@ -29,6 +29,13 @@ impl Vec2 {
     pub fn normal(self) -> Vec2 {
         Vec2::new(-self.y, self.x)
     }
+
+    pub fn chunk(self, chunk_size: f32) -> (i32, i32) {
+        (
+            (self.x / chunk_size).floor() as i32,
+            (self.y / chunk_size).floor() as i32,
+        )
+    }
 }
 
 impl Add for Vec2 {
@@ -104,27 +111,9 @@ impl Rect {
     }
 
     pub fn chunks(&self, chunk_size: f32) -> impl Iterator<Item = (i32, i32)> {
-        let min_x = (self.pos.x / chunk_size).floor() as i32;
-        let min_y = (self.pos.y / chunk_size).floor() as i32;
-        let max_x = ((self.pos.x + self.size.x) / chunk_size).floor() as i32;
-        let max_y = ((self.pos.y + self.size.y) / chunk_size).floor() as i32;
+        let (min_x, min_y) = self.min().chunk(chunk_size);
+        let (max_x, max_y) = self.max().chunk(chunk_size);
         (min_x..=max_x).flat_map(move |x| (min_y..=max_y).map(move |y| (x, y)))
     }
 }
 
-pub fn mtv(a: Rect, b: Rect) -> Option<Vec2> {
-    let ox = a.max().x.min(b.max().x) - a.min().x.max(b.min().x);
-    let oy = a.max().y.min(b.max().y) - a.min().y.max(b.min().y);
-
-    if ox <= 0.0 || oy <= 0.0 {
-        return None;
-    }
-
-    let delta = a.center() - b.center();
-
-    if ox < oy {
-        Some(Vec2::new(ox.copysign(delta.x), 0.0))
-    } else {
-        Some(Vec2::new(0.0, oy.copysign(delta.y)))
-    }
-}
