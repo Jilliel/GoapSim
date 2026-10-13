@@ -12,16 +12,16 @@ impl Health {
         Self { cur: max, max }
     }
 
+    pub fn amount(&self) -> u32 {
+        self.cur
+    }
+
     pub fn damage(&mut self, amount: u32) {
         self.cur = self.cur.saturating_sub(amount);
     }
 
     pub fn heal(&mut self, amount: u32) {
         self.cur = self.cur.saturating_add(amount).min(self.max);
-    }
-
-    pub fn dead(&self) -> bool {
-        self.cur == 0
     }
 }
 
@@ -43,6 +43,10 @@ impl Villager {
         self.pos
     }
 
+    pub fn translate(&mut self, delta: Vec2) {
+        self.pos += delta;
+    }
+
     pub fn damage(&mut self, amount: u32) {
         self.health.damage(amount);
     }
@@ -52,7 +56,7 @@ impl Villager {
     }
 
     pub fn dead(&self) -> bool {
-        self.health.dead()
+        self.health.amount() == 0
     }
 }
 
