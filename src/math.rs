@@ -116,4 +116,3 @@ impl Rect {
         (min_x..=max_x).flat_map(move |x| (min_y..=max_y).map(move |y| (x, y)))
     }
 }
-
