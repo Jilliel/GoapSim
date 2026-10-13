@@ -1,5 +1,6 @@
 use crate::{
     math::{Rect, Vec2},
+    simulation::System,
     world::World,
 };
 use rustc_hash::FxHashMap;
@@ -14,12 +15,12 @@ pub struct Chunk {
 type ChunkCoords = (i32, i32);
 
 #[derive(Debug, Default, Clone)]
-pub struct PhysicModule {
+pub struct PhysicSystem {
     chunks: FxHashMap<ChunkCoords, Chunk>,
 }
 
-impl PhysicModule {
-    pub fn init(&mut self, world: &World) {
+impl System for PhysicSystem {
+    fn initialize(&mut self, world: &World) {
         self.chunks.clear();
         for (id, resource) in world.resources.iter().enumerate() {
             let rect = Rect::new(resource.position(), Vec2::new(2.0, 2.0));
@@ -29,9 +30,9 @@ impl PhysicModule {
         }
     }
 
-    pub fn run(&self, world: &mut World) {
+    fn run(&mut self, world: &mut World) {
         for villager in &mut world.villagers {
-            let rect = Rect::new(villager.position() - Vec2::new(0.5, 0.5), Vec2::new(1.0, 1.0));
+            let rect = Rect::new(villager.position(), Vec2::new(1.0, 1.0));
             for coords in rect.chunks(CHUNK_SIZE) {
                 let Some(chunk) = self.chunks.get(&coords) else {
                     continue;
@@ -57,4 +58,3 @@ impl PhysicModule {
         }
     }
 }
-
