@@ -1,6 +1,6 @@
+use super::System;
 use crate::{
     math::{Rect, Vec2},
-    simulation::System,
     world::World,
 };
 use rustc_hash::FxHashMap;
